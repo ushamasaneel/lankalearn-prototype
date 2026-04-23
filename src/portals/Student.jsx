@@ -1,42 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { s } from '../styles/theme';
-import { PageHeader, Card } from '../components/UI';
 import { DB } from '../db';
 
 export default function StudentPortal({ user, onLogout }) {
-  const myCourses = DB.courses.filter(c => c.students.includes(user.id));
+  const [activeTab, setActiveTab] = useState("courses");
+
+  const handleUpload = (courseName) => {
+    const fileName = prompt(`Upload document for ${courseName}:`, "assignment1.pdf");
+    if (fileName) {
+      DB.submissions.push({
+        id: Date.now(),
+        student: user.name,
+        course: courseName,
+        file: fileName,
+        date: new Date().toLocaleDateString()
+      });
+      alert("Uploaded! Your teacher can now see this.");
+    }
+  };
 
   return (
     <div style={s.shell}>
       <aside style={s.sidebar}>
-        <div style={{ padding: '30px 20px', textAlign: 'center', borderBottom: '1px solid #e2e8f0' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#2563eb' }}>LankaLearn</h2>
-        </div>
-        <nav style={{ flex: 1, paddingTop: '20px' }}>
-          <div style={s.navItem}>📚 My Courses</div>
-          <div style={s.navItem}>📝 Assignments</div>
-          <div style={s.navItem}>📊 Gradebook</div>
-        </nav>
-        <div style={{ padding: '20px', borderTop: '1px solid #e2e8f0' }}>
-          <button onClick={onLogout} style={{ ...s.btnDanger, width: '100%' }}>Sign Out</button>
+        <div style={{ padding: "40px 24px" }}><h2 style={{ color: "#2563eb", fontWeight: "800" }}>LankaLearn</h2></div>
+        
+        <button onClick={() => setActiveTab("courses")} style={{ ...s.navBtn, ...(activeTab === "courses" ? s.navBtnActive : {}) }}>📚 My Courses</button>
+        <button onClick={() => setActiveTab("assignments")} style={{ ...s.navBtn, ...(activeTab === "assignments" ? s.navBtnActive : {}) }}>📝 Assignments</button>
+        <button onClick={() => setActiveTab("grades")} style={{ ...s.navBtn, ...(activeTab === "grades" ? s.navBtnActive : {}) }}>📊 Gradebook</button>
+
+        <div style={{ marginTop: "auto", padding: "24px" }}>
+          <button onClick={onLogout} style={{ width: "100%", padding: "12px", background: "#fee2e2", color: "#ef4444", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "600" }}>Sign Out</button>
         </div>
       </aside>
+
       <main style={s.main}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <PageHeader title={`Welcome, ${user.name}`} sub={`Viewing Student Dashboard for ${user.course}`} />
+        <h1 style={{ fontSize: "32px", fontWeight: "800", marginBottom: "8px" }}>{activeTab.toUpperCase()}</h1>
+        <p style={{ color: "#64748b", marginBottom: "32px" }}>LankaLearn • {user.name}</p>
+
+        {activeTab === "courses" && (
           <div style={s.grid}>
-            {myCourses.map(c => (
-              <Card key={c.id} title={c.name}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontWeight: '600' }}>{c.code}</span>
-                  <span style={{ color: '#2563eb', fontSize: '12px', fontWeight: 'bold' }}>{c.credits} CREDITS</span>
+            {DB.courses.map(c => (
+              <div key={c.id} style={{ background: "white", padding: "24px", borderRadius: "16px", border: "1px solid #e2e8f0" }}>
+                <h3 style={{ fontSize: "20px", marginBottom: "8px" }}>{c.name}</h3>
+                <p style={{ color: "#64748b", fontSize: "14px" }}>Subject Code: {c.code}</p>
+                <div style={s.uploadBox}>
+                   <button onClick={() => handleUpload(c.name)} style={{ background: "#2563eb", color: "white", border: "none", padding: "8px 16px", borderRadius: "6px", cursor: "pointer" }}>Upload Work</button>
                 </div>
-                <p style={{ marginTop: '12px', fontSize: '14px', color: '#64748b' }}>{c.description}</p>
-                <button style={{ ...s.btn, width: '100%', marginTop: '20px', background: '#f1f5f9', color: '#2563eb' }}>View Materials</button>
-              </Card>
+              </div>
             ))}
           </div>
-        </div>
+        )}
       </main>
     </div>
   );

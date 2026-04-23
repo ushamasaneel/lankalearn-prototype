@@ -1,32 +1,38 @@
 import React from 'react';
 import { s } from '../styles/theme';
-import { PageHeader, Card } from '../components/UI';
 import { DB } from '../db';
 
 export default function TeacherPortal({ user, onLogout }) {
-  const teacherCourses = DB.courses.filter(c => c.teacher === user.id);
-
   return (
     <div style={s.shell}>
       <aside style={s.sidebar}>
-        <div style={{ padding: '20px', fontWeight: 'bold', fontSize: '20px', color: '#059669' }}>LankaLearn</div>
-        <nav style={{ flex: 1, padding: '10px' }}>
-          <div style={{ color: '#059669', fontSize: '12px', fontWeight: 'bold', padding: '10px' }}>TEACHER MENU</div>
-        </nav>
-        <div style={{ padding: '20px', borderTop: '1px solid #334155' }}>
-          <button onClick={onLogout} style={{ ...s.btn, background: '#ef4444', width: '100%' }}>Logout</button>
-        </div>
+         <div style={{ padding: "40px 24px" }}><h2 style={{ color: "#059669", fontWeight: "800" }}>Teacher View</h2></div>
+         <button onClick={onLogout} style={{ margin: "24px", padding: "12px", background: "#ef4444", color: "white", border: "none", borderRadius: "8px" }}>Logout</button>
       </aside>
+
       <main style={s.main}>
-        <PageHeader title={`Welcome, ${user.name}`} sub="Manage your courses and grade students." />
-        <div style={s.grid}>
-          {teacherCourses.map(c => (
-            <Card key={c.id} title={c.name}>
-              <p style={{ color: '#94a3b8' }}>{c.code} • {c.students.length} Students Enrolled</p>
-              <button style={{ ...s.btn, marginTop: '10px', fontSize: '12px', padding: '8px' }}>Manage Course</button>
-            </Card>
-          ))}
-        </div>
+        <h1 style={{ marginBottom: "20px" }}>Student Submissions</h1>
+        <table style={{ width: "100%", borderCollapse: "collapse", background: "white", borderRadius: "12px", overflow: "hidden" }}>
+          <thead>
+            <tr style={{ background: "#f1f5f9", textAlign: "left" }}>
+              <th style={{ padding: "16px" }}>Student</th>
+              <th style={{ padding: "16px" }}>Subject</th>
+              <th style={{ padding: "16px" }}>File</th>
+              <th style={{ padding: "16px" }}>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {DB.submissions.map(sub => (
+              <tr key={sub.id} style={{ borderBottom: "1px solid #e2e8f0" }}>
+                <td style={{ padding: "16px" }}>{sub.student}</td>
+                <td style={{ padding: "16px" }}>{sub.course}</td>
+                <td style={{ padding: "16px", color: "#2563eb" }}>🔗 {sub.file}</td>
+                <td style={{ padding: "16px" }}>{sub.date}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {DB.submissions.length === 0 && <p style={{ padding: "20px", color: "#64748b" }}>No uploads yet.</p>}
       </main>
     </div>
   );
