@@ -8,20 +8,29 @@ export default function Login({ onLogin }) {
   return (
     <div style={s.loginWrap}>
       <div style={s.loginCard}>
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <span style={{ fontSize: '48px', display: 'block', marginBottom: '10px' }}>🎓</span>
-          <h1 style={{ color: '#0f172a', fontSize: '28px', fontWeight: '800' }}>LankaLearn</h1>
-          <p style={{ color: '#64748b', fontSize: '14px' }}>Education Portal • Pilot v1.0</p>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{ fontSize: '48px', marginBottom: '10px' }}>🎓</div>
+          <h1 style={{ color: '#0f172a', fontSize: '28px', fontWeight: '800', margin: 0 }}>LankaLearn</h1>
+          <p style={{ color: '#64748b', fontSize: '14px', marginTop: '5px' }}>Netherfield International School</p>
         </div>
-        <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#475569' }}>Email Address</label>
-        <input style={s.input} type="email" placeholder="name@school.com" value={email} onChange={e => setEmail(e.target.value)} />
         
-        <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#475569', marginTop: '10px' }}>Password</label>
-        <input style={s.input} type="password" placeholder="••••••••" value={pass} onChange={e => setPass(e.target.value)} />
-        
-        <button style={{ ...s.btn, width: '100%', marginTop: '24px' }} onClick={() => onLogin(email, pass)}>
-          Sign In to LankaLearn
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '600', color: '#475569' }}>Email</label>
+          <input style={{ ...s.input, marginBottom: 0 }} type="email" placeholder="student@school.lk" value={email} onChange={e => setEmail(e.target.value)} />
+        </div>
+
+        <div style={{ marginBottom: '30px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '600', color: '#475569' }}>Password</label>
+          <input style={{ ...s.input, marginBottom: 0 }} type="password" placeholder="••••••••" value={pass} onChange={e => setPass(e.target.value)} />
+        </div>
+
+        <button style={{ ...s.btnPrimary, width: '100%' }} onClick={() => onLogin(email, pass)}>
+          Sign In
         </button>
+        
+        <p style={{ textAlign: 'center', fontSize: '12px', color: '#94a3b8', marginTop: '24px' }}>
+          © 2026 LankaLearn Education Technologies
+        </p>
       </div>
     </div>
   );
