@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DB } from "./db";
-import Login from "./auth/login";
+import Login from "./auth/Login";
 import StudentPortal from "./portals/Student";
 import TeacherPortal from "./portals/Teacher";
 import AdminPortal from "./portals/Admin";
